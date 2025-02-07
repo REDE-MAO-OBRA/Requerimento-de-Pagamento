@@ -1,141 +1,163 @@
-function enviarDados() {
-    const solicitante = document.getElementById("solicitante").value;
-    const recebedor = document.getElementById("recebedor").value;
-    const cpf_cnpj = document.getElementById("cpf_cnpj").value;
-    const pix = document.getElementById("pix").value;
-    const banco = document.getElementById("banco").value;
-    const agencia = document.getElementById("agencia").value;
-    const conta = document.getElementById("conta").value;
-    const tipo_conta = document.getElementById("tipo_conta").value;
-    const servicos = document.getElementById("servicos").value;
-    const valor = document.getElementById("valor").value;
-    const data_servico = document.getElementById("data_servico").value;
-    const data_pagamento = document.getElementById("data_pagamento").value;
-    const centro_custo = document.getElementById("centro_custo").value;
-    const local = document.getElementById("local").value;
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Requerimento de Pagamento</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>Requerimento de Pagamento</h2>
+        <form id="paymentForm">
+            <label for="solicitante">Solicitante - Nome Completo:</label>
+            <input type="text" id="solicitante" required>
+            
+            <label for="recebedor">Recebedor/Razão Social - Nome Completo:</label>
+            <input type="text" id="recebedor" required>
+            
+            <label for="cpf_cnpj">CPF ou CNPJ:</label>
+            <input type="text" id="cpf_cnpj" required>
+            
+            <label for="pix">Chave PIX:</label>
+            <input type="text" id="pix" required>
+            
+            <label for="banco">Banco:</label>
+            <input type="text" id="banco" required>
+            
+            <label for="agencia">Agência (Com Dígito):</label>
+            <input type="text" id="agencia" required>
+            
+            <label for="conta">Conta (Com Dígito):</label>
+            <input type="text" id="conta" required>
+            
+            <label for="tipo_conta">Tipo de Conta:</label>
+            <select id="tipo_conta" required>
+                <option value="" disabled selected>Selecione</option>
+                <option value="Poupança">Poupança</option>
+                <option value="Corrente">Corrente</option>
+            </select>
+            
+            <label for="servicos">Natureza/Serviço Realizado:</label>
+<select id="servicos" name="servico" required>
+    <option value="" disabled selected>Selecione o serviço</option>
+    <option value="13º DECIMO TERCEIRO SALÁRIO">13º DECIMO TERCEIRO SALÁRIO</option>
+    <option value="ABONO PIS">ABONO PIS</option>
+    <option value="AGUA E OUTROS INSUMOS">AGUA E OUTROS INSUMOS</option>
+    <option value="ALIMENTAÇAO">ALIMENTAÇÃO</option>
+    <option value="ALUGUEL IMÓVEIS">ALUGUEL IMÓVEIS</option>
+    <option value="APLICACAO">APLICAÇÃO</option>
+    <option value="ASSISTENCIA MEDICA">ASSISTÊNCIA MÉDICA</option>
+    <option value="ASSISTENCIA ODONTOLOGICA">ASSISTÊNCIA ODONTOLÓGICA</option>
+    <option value="AUXILIO INFRA-ESTRUTURA">AUXÍLIO INFRA-ESTRUTURA</option>
+    <option value="BRINDES E CONFRATERNIZAÇÕES">BRINDES E CONFRATERNIZAÇÕES</option>
+    <option value="CAPITALIZAÇÕES">CAPITALIZAÇÕES</option>
+    <option value="CARTAO DE CREDITO">CARTÃO DE CRÉDITO</option>
+    <option value="CERTIFICADO DIGITAL">CERTIFICADO DIGITAL</option>
+    <option value="CESTA BASICA">CESTA BÁSICA</option>
+    <option value="COFINS - 2172">COFINS - 2172</option>
+    <option value="COMBUSTIVEL">COMBUSTÍVEL</option>
+    <option value="COMISSAO">COMISSÃO</option>
+    <option value="COMPRA DE MOVEIS">COMPRA DE MÓVEIS</option>
+    <option value="COMPRA MAQUINAS E EQUIPAMENTOS">COMPRA MÁQUINAS E EQUIPAMENTOS</option>
+    <option value="CONDOMINIO">CONDOMÍNIO</option>
+    <option value="CONSORCIO">CONSÓRCIO</option>
+    <option value="CORRESPONDENCIAS E OUTROS">CORRESPONDÊNCIAS E OUTROS</option>
+    <option value="CSLL">CSLL</option>
+    <option value="DESPESAS COM SINDICATO">DESPESAS COM SINDICATO</option>
+    <option value="DESPESAS COM VIAGENS">DESPESAS COM VIAGENS</option>
+    <option value="DESPESAS JUDICIAIS/TRABALHISTA">DESPESAS JUDICIAIS/TRABALHISTA</option>
+    <option value="DESPESAS/LOCAÇÕES DE VEICULOS">DESPESAS/LOCAÇÕES DE VEÍCULOS</option>
+    <option value="DEVOLUÇÕES E ESTORNOS">DEVOLUÇÕES E ESTORNOS</option>
+    <option value="DIARIAS E COBERTURAS/SERVIÇOS DE LIMPEZA">DIÁRIAS E COBERTURAS/SERVIÇOS DE LIMPEZA</option>
+    <option value="DOACAO">DOAÇÃO</option>
+    <option value="EMPRESTIMO BANCARIO">EMPRÉSTIMO BANCÁRIO</option>
+    <option value="EMPRESTIMO TERCEIROS">EMPRÉSTIMO A TERCEIROS</option>
+    <option value="ENERGIA ELETRICA">ENERGIA ELÉTRICA</option>
+    <option value="EXAME OCUPACIONAL / ASO">EXAME OCUPACIONAL / ASO</option>
+    <option value="FARDAMENTOS/UNIFORMES/EPIS">FARDAMENTOS/UNIFORMES/EPIS</option>
+    <option value="FERIAS">FÉRIAS</option>
+    <option value="FGTS">FGTS</option>
+    <option value="FOLHA DE PAGAMENTO/SALÁRIOS">FOLHA DE PAGAMENTO/SALÁRIOS</option>
+    <option value="FUNDO FIXO E REEMBOLSOS">FUNDO FIXO E REEMBOLSOS</option>
+    <option value="GRATIFICACAO">GRATIFICAÇÃO</option>
+    <option value="GRRF">GRRF</option>
+    <option value="HONORARIOS ADVOCATICIO">HONORÁRIOS ADVOCATÍCIOS</option>
+    <option value="HONORARIOS CONTABEIS">HONORÁRIOS CONTÁBEIS</option>
+    <option value="INATIVO - SERASA">INATIVO - SERASA</option>
+    <option value="INSS">INSS</option>
+    <option value="IPTU">IPTU</option>
+    <option value="IRPJ">IRPJ</option>
+    <option value="JARDINAGEM CONTRATOS">JARDINAGEM CONTRATOS</option>
+    <option value="LICITAÇÃO">LICITAÇÃO</option>
+    <option value="LIMPEZA / LAVAGEM">LIMPEZA / LAVAGEM</option>
+    <option value="LOCAÇÃO IMÓVEIS">LOCAÇÃO IMÓVEIS</option>
+    <option value="MANUTENCAO DE EQUIPAMENTOS">MANUTENÇÃO DE EQUIPAMENTOS</option>
+    <option value="MANUTENÇÃO/REFORMA DE IMOVEL">MANUTENÇÃO/REFORMA DE IMÓVEL</option>
+    <option value="MATERIAL DE ESCRITÓRIO">MATERIAL DE ESCRITÓRIO</option>
+    <option value="MATERIAL DE LIMPEZA">MATERIAL DE LIMPEZA</option>
+    <option value="OUTROS">OUTROS</option>
+    <option value="PARCELAMENTO DEMAIS DEBITOS">PARCELAMENTO DEMAIS DÍBITOS</option>
+    <option value="PENSAO ALIMENTICIA">PENSÃO ALIMENTÍCIA</option>
+    <option value="PERDA">PERDA</option>
+    <option value="PIS - 8109">PIS - 8109</option>
+    <option value="PLR">PLR</option>
+    <option value="PROGRAMA JOVENS APRENDIZES">PROGRAMA JOVENS APRENDIZES</option>
+    <option value="PROLABORE">PROLABORE</option>
+    <option value="RECEBIMENTO">RECEBIMENTO</option>
+    <option value="RECEITA PREST SERV">RECEITA PREST SERV</option>
+    <option value="RESCISÃO">RESCISÃO</option>
+    <option value="RESGATE AUTOMATICO">RESGATE AUTOMÁTICO</option>
+    <option value="RETIRADA DE SOCIO">RETIRADA DE SÓCIO</option>
+    <option value="SEGURANCA">SEGURANÇA</option>
+    <option value="SEGURO DE VIDA">SEGURO DE VIDA</option>
+    <option value="SEGURO GARANTIA CONTRATUAL">SEGURO GARANTIA CONTRATUAL</option>
+    <option value="SISTEMAS E LOCACAO DE SOFTWARE">SISTEMAS E LOCAÇÃO DE SOFTWARE</option>
+    <option value="TARIFAS BANCARIAS">TARIFAS BANCÁRIAS</option>
+    <option value="TAXA">TAXA</option>
+    <option value="TELEFONE E INTERNET">TELEFONE E INTERNET</option>
+    <option value="TRANSPORTE">TRANSPORTE</option>
+    <option value="TREINAMENTOS E CURSOS">TREINAMENTOS E CURSOS</option>
+</select>
 
-    // Validação de campos obrigatórios
-    if (!solicitante || !recebedor || !cpf_cnpj || !servicos || !valor || !data_servico || !data_pagamento || !centro_custo || !local) {
-        alert("Por favor, preencha todos os campos obrigatórios.");
-        return; // Impede o envio caso algum campo não esteja preenchido
-    }
+            
+            <label for="valor">Valor Total (R$):</label>
+            <input type="number" id="valor" required>
+            
+            <label for="data_servico">Data do Serviço:</label>
+            <input type="date" id="data_servico" required>
+            
+            <label for="data_pagamento">Data para Pagamento:</label>
+            <input type="date" id="data_pagamento" required>
+            
+            <label for="centro_custo">Centro de Custo:</label>
+<select id="centro_custo" required>
+    <option value="" disabled selected>Selecione</option>
+    <option value="SEDE">SEDE</option>
+    <option value="TCA - FUNCEB">TCA - FUNCEB</option>
+    <option value="SSP - STELECOM">SSP - STELECOM</option>
+    <option value="IFBA - CAMAÇARI">IFBA - CAMAÇARI</option>
+    <option value="IFBA - JUAZEIRO">IFBA - JUAZEIRO</option>
+    <option value="IFBA - PORTO SEGURO">IFBA - PORTO SEGURO</option>
+    <option value="IFBA - LHEUS">IFBA - LHEUS</option>
+    <option value="EMLURB - NECROPOLES">EMLURB - NECROPOLES</option>
+    <option value="EMLURB - WC">EMLURB - WC</option>
+    <option value="BANCO DO BRASIL - 2194">BANCO DO BRASIL - 2194</option>
+    <option value="BANCO DO BRASIL - 8604">BANCO DO BRASIL - 8604</option>
+    <option value="DEPIN - POLICIA CIVIL">DEPIN - POLICIA CIVIL</option>
+</select>
 
-    // Se o campo PIX estiver vazio, os campos do Banco são obrigatórios
-    if (!pix) {
-        if (!banco || !agencia || !conta || !tipo_conta) {
-            alert("Por favor, preencha todos os campos de banco.");
-            return; // Impede o envio caso algum campo de banco não esteja preenchido
-        }
-    }
-
-    // Envio dos dados para o Excel através da API SheetMonkey
-    fetch("https://api.sheetmonkey.io/form/b2cwo2nua4kmJ4nDtVL5Ni", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            solicitante: solicitante,
-            recebedor: recebedor,
-            cpf_cnpj: cpf_cnpj,
-            pix: pix,
-            banco: banco,
-            agencia: agencia,
-            conta: conta,
-            tipo_conta: tipo_conta,
-            servicos: servicos,
-            valor: valor,
-            data_servico: data_servico,
-            data_pagamento: data_pagamento,
-            centro_custo: centro_custo,
-            local: local,
-            status: "Pendente"  // Nova coluna "Status" com valor "Pendente"
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Exibir mensagem de agradecimento após sucesso
-            const mensagem = document.createElement("div");
-            mensagem.textContent = "Obrigado por USAR O NOSSOS SERVIÇOS!";
-            mensagem.style.fontSize = "20px";
-            mensagem.style.fontWeight = "bold";
-            mensagem.style.color = "green";
-            mensagem.style.textAlign = "center";
-            mensagem.style.marginTop = "20px";
-            document.body.appendChild(mensagem); // Adiciona a mensagem na página
-
-            // Não mostrar a caixa de erro
-            console.log("Dados enviados com sucesso!");
-        }
-    })
-    .catch(error => {
-        console.error("Erro ao enviar os dados:", error);
-        // Remover alerta de erro
-        // Não precisa mostrar o erro, pois estamos usando apenas o log
-    });
-
-    // Geração do PDF (código permanece inalterado)
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
-    // Adicionando a logo ao PDF
-    const logo = 'logo.png'; // Caminho da logo
-    const logoWidth = 80; // Largura da logo (tamanho mais amplo)
-    const logoHeight = 60; // Altura da logo (aumento proporcional)
-
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-
-    const img = new Image();
-    img.src = logo;
-    img.onload = function () {
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.globalAlpha = 0.1; // Opacidade baixa para efeito de marca d'água
-        ctx.drawImage(img, 0, 0);
-
-        const dataUrl = canvas.toDataURL("image/png");
-
-        const logoX = (doc.internal.pageSize.width - logoWidth) / 2;
-        const logoY = (doc.internal.pageSize.height - logoHeight) / 6;
-
-        doc.addImage(dataUrl, 'PNG', logoX, logoY, logoWidth, logoHeight);
-
-        // Adicionando um título estilizado
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(18);
-        doc.text("Recibo de Pagamento", 105, 20, null, null, "center");
-
-        // Estilo para os dados
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(12);
-        doc.setTextColor(50, 50, 50);
-
-        const startY = 50;
-        doc.text(`Solicitante: ${solicitante}`, 20, startY);
-        doc.text(`Recebedor: ${recebedor}`, 20, startY + 10);
-        doc.text(`CPF/CNPJ: ${cpf_cnpj}`, 20, startY + 20);
-        doc.text(`Chave PIX: ${pix}`, 20, startY + 30);
-        doc.text(`Banco: ${banco}`, 20, startY + 40);
-        doc.text(`Agência: ${agencia}`, 20, startY + 50);
-        doc.text(`Conta: ${conta}`, 20, startY + 60);
-        doc.text(`Tipo de Conta: ${tipo_conta}`, 20, startY + 70);
-        doc.text(`Serviço Realizado: ${servicos}`, 20, startY + 80);
-        doc.text(`Valor: R$ ${valor}`, 20, startY + 90);
-        doc.text(`Data do Serviço: ${data_servico}`, 20, startY + 100);
-        doc.text(`Data de Pagamento: ${data_pagamento}`, 20, startY + 110);
-        doc.text(`Centro de Custo: ${centro_custo}`, 20, startY + 120);
-        doc.text(`Local do Serviço: ${local}`, 20, startY + 130);
-
-        doc.setLineWidth(0.5);
-        doc.line(20, startY + 140, 190, startY + 140);
-
-        doc.setFont("helvetica", "italic");
-        doc.setFontSize(10);
-        doc.setTextColor(100, 100, 100);
-        doc.text("Obrigado por utilizar nossos serviços!", 105, startY + 160, null, null, "center");
-
-        doc.save(`Recibo_${solicitante}.pdf`);
-    };
-}
+            
+            <label for="local">Cidade/Local do Serviço:</label>
+            <input type="text" id="local" required>
+            
+            <button type="button" onclick="enviarDados()">Enviar</button>
+            <p class="message" id="successMessage">Dados enviados com sucesso!</p>
+        </form>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
