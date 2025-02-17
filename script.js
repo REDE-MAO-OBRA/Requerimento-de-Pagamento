@@ -13,19 +13,12 @@ function enviarDados() {
     const data_pagamento = document.getElementById("data_pagamento").value;
     const centro_custo = document.getElementById("centro_custo").value;
     const local = document.getElementById("local").value;
+    const autorizado = document.getElementById("autorizado").value;  // Novo campo
 
     // Validação de campos obrigatórios
-    if (!solicitante || !recebedor || !cpf_cnpj || !servicos || !valor || !data_servico || !data_pagamento || !centro_custo || !local) {
+    if (!solicitante || !recebedor || !cpf_cnpj || !servicos || !valor || !data_servico || !data_pagamento || !centro_custo || !local || !autorizado) {
         alert("Por favor, preencha todos os campos obrigatórios.");
         return; // Impede o envio caso algum campo não esteja preenchido
-    }
-
-    // Se o campo PIX estiver vazio, os campos do Banco são obrigatórios
-    if (!pix) {
-        if (!banco || !agencia || !conta || !tipo_conta) {
-            alert("Por favor, preencha todos os campos de banco.");
-            return; // Impede o envio caso algum campo de banco não esteja preenchido
-        }
     }
 
     // Envio dos dados para o Excel através da API SheetMonkey
@@ -49,7 +42,8 @@ function enviarDados() {
             data_pagamento: data_pagamento,
             centro_custo: centro_custo,
             local: local,
-            status: "Pendente"  // Nova coluna "Status" com valor "Pendente"
+            autorizado: autorizado,  // Adicionando o novo campo
+            status: "Pendente"
         })
     })
     .then(response => response.json())
@@ -64,25 +58,19 @@ function enviarDados() {
             mensagem.style.textAlign = "center";
             mensagem.style.marginTop = "20px";
             document.body.appendChild(mensagem); // Adiciona a mensagem na página
-
-            // Não mostrar a caixa de erro
-            console.log("Dados enviados com sucesso!");
         }
     })
     .catch(error => {
         console.error("Erro ao enviar os dados:", error);
-        // Remover alerta de erro
-        // Não precisa mostrar o erro, pois estamos usando apenas o log
     });
 
-    // Geração do PDF (código permanece inalterado)
+    // Geração do PDF
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    // Adicionando a logo ao PDF
-    const logo = 'logo.png'; // Caminho da logo
-    const logoWidth = 80; // Largura da logo (tamanho mais amplo)
-    const logoHeight = 60; // Altura da logo (aumento proporcional)
+    const logo = 'logo.png'; 
+    const logoWidth = 80; 
+    const logoHeight = 60; 
 
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
@@ -92,7 +80,7 @@ function enviarDados() {
     img.onload = function () {
         canvas.width = img.width;
         canvas.height = img.height;
-        ctx.globalAlpha = 0.1; // Opacidade baixa para efeito de marca d'água
+        ctx.globalAlpha = 0.1; 
         ctx.drawImage(img, 0, 0);
 
         const dataUrl = canvas.toDataURL("image/png");
@@ -102,12 +90,10 @@ function enviarDados() {
 
         doc.addImage(dataUrl, 'PNG', logoX, logoY, logoWidth, logoHeight);
 
-        // Adicionando um título estilizado
         doc.setFont("helvetica", "bold");
         doc.setFontSize(18);
         doc.text("Recibo de Pagamento", 105, 20, null, null, "center");
 
-        // Estilo para os dados
         doc.setFont("helvetica", "normal");
         doc.setFontSize(12);
         doc.setTextColor(50, 50, 50);
@@ -127,9 +113,10 @@ function enviarDados() {
         doc.text(`Data de Pagamento: ${data_pagamento}`, 20, startY + 110);
         doc.text(`Centro de Custo: ${centro_custo}`, 20, startY + 120);
         doc.text(`Local do Serviço: ${local}`, 20, startY + 130);
+        doc.text(`Autorizado por: ${autorizado}`, 20, startY + 140);  // Novo campo no PDF
 
         doc.setLineWidth(0.5);
-        doc.line(20, startY + 140, 190, startY + 140);
+        doc.line(20, startY + 150, 190, startY + 150);
 
         doc.setFont("helvetica", "italic");
         doc.setFontSize(10);
