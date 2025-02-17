@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -121,9 +121,7 @@
     <option value="TRANSPORTE">TRANSPORTE</option>
     <option value="TREINAMENTOS E CURSOS">TREINAMENTOS E CURSOS</option>
 </select>
-
-            
-            <label for="valor">Valor Total (R$):</label>
+ <label for="valor">Valor Total (R$):</label>
             <input type="number" id="valor" required>
             
             <label for="data_servico">Data do Serviço:</label>
@@ -151,6 +149,10 @@
             
             <label for="local">Cidade/Local do Serviço:</label>
             <input type="text" id="local" required>
+
+            <label for="autorizado">Autorizado Por:</label>
+<input type="text" id="autorizado" required>
+
             
             <button type="button" onclick="enviarDados()">Enviar</button>
             <p class="message" id="successMessage">Dados enviados com sucesso!</p>
